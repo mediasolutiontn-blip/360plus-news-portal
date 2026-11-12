@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>360+ Admin Panel</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f4f9;color:#182238}
+.login{max-width:400px;margin:100px auto;background:white;padding:30px;border-radius:15px;box-shadow:0 5px 25px #ccc}
+h2{text-align:center;color:#102447}
+input,select,textarea{width:100%;padding:13px;margin:10px 0;border:1px solid #ccc;border-radius:7px;font-size:16px}
+button{background:#c82032;color:white;border:0;padding:13px 20px;border-radius:7px;cursor:pointer;font-size:16px}
+.dashboard{display:none;padding:25px;max-width:900px;margin:auto}
+.card{background:white;padding:25px;border-radius:12px;margin:20px 0;box-shadow:0 3px 12px #ddd}
+.logout{float:right;background:#555}
+</style>
+</head>
+<body>
+
+<div class="login" id="login">
+<h2>360+ DIGITAL NEWS</h2>
+<h3 style="text-align:center">ADMIN LOGIN</h3>
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+<button onclick="loginAdmin()" style="width:100%">LOGIN</button>
+<p id="error" style="color:red;text-align:center"></p>
+</div>
+
+<div class="dashboard" id="dashboard">
+<button class="logout" onclick="logout()">Logout</button>
+<h2>360+ NEWS ADMIN DASHBOARD</h2>
+<p>Welcome Admin</p>
+
+<div class="card">
+<h3>புதிய செய்தி சேர்க்கவும்</h3>
+
+<select id="district">
+<option>திருப்பத்தூர்</option>
+<option>ராணிப்பேட்டை</option>
+</select>
+
+<input id="title" placeholder="செய்தி தலைப்பு">
+<textarea id="details" rows="5" placeholder="செய்தி விவரம்"></textarea>
+<input id="photo" type="file" accept="image/*">
+
+<button onclick="saveNews()">SAVE NEWS</button>
+<p id="status"></p>
+</div>
+
+<div class="card">
+<h3>சேர்க்கப்பட்ட செய்திகள்</h3>
+<div id="newsList"></div>
+</div>
+</div>
+
+<script>
+function loginAdmin(){
+let u=document.getElementById('username').value;
+let p=document.getElementById('password').value;
+
+if(u==="admin" && p==="360plus@2026"){
+document.getElementById('login').style.display="none";
+document.getElementById('dashboard').style.display="block";
+showNews();
+}else{
+document.getElementById('error').innerText="Login தவறு!";
+}
+}
+
+function logout(){
+document.getElementById('dashboard').style.display="none";
+document.getElementById('login').style.display="block";
+}
+
+function saveNews(){
+let district=document.getElementById('district').value;
+let title=document.getElementById('title').value;
+let details=document.getElementById('details').value;
+
+if(!title || !details){
+alert("தலைப்பு மற்றும் செய்தி விவரம் தேவை");
+return;
+}
+
+let news=JSON.parse(localStorage.getItem('news360')||'[]');
+
+news.push({district,title,details,date:new Date().toLocaleDateString('ta-IN')});
+
+localStorage.setItem('news360',JSON.stringify(news));
+
+document.getElementById('status').innerText="News Saved!";
+document.getElementById('title').value="";
+document.getElementById('details').value="";
+showNews();
+}
+
+function showNews(){
+let news=JSON.parse(localStorage.getItem('news360')||'[]');
+document.getElementById('newsList').innerHTML=
+news.map(n=>`<p><b>${n.district} - ${n.title}</b><br>${n.details}</p><hr>`).join('');
+}
+</script>
+</body>
+</html>
