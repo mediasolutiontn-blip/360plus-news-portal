@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>360+ DIGITAL NEWS | தமிழ் செய்திகள்</title>
+<meta name="description" content="திருப்பத்தூர் மற்றும் ராணிப்பேட்டை மாவட்டங்களின் முக்கிய செய்திகள்">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5f9;color:#182238;font-family:'Noto Sans Tamil',sans-serif}
+header{background:#102447;color:white;padding:18px 5%}
+.brand{font-size:27px;font-weight:800}
+.brand span{color:#ffca35}
+.tagline{font-size:12px;color:#cbd8ed}
+nav{background:#18365f;padding:12px 5%;display:flex;gap:22px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-size:14px}
+nav a:hover{color:#ffcf38}
+.breaking{background:#c82032;color:white;padding:10px 5%;font-weight:700}
+.breaking span{background:white;color:#c82032;padding:4px 9px;margin-right:10px;border-radius:3px}
+.container{max-width:1200px;margin:auto;padding:22px 15px}
+.welcome{text-align:center;padding:20px 10px}
+.welcome h1{font-size:25px;margin:0 0 8px}
+.welcome p{color:#69768b}
+.districts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0}
+.district{padding:25px;border-radius:12px;color:white;text-align:center}
+.tir{background:linear-gradient(120deg,#123e83,#2478c9)}
+.rpt{background:linear-gradient(120deg,#8e1e35,#df4353)}
+.district h2{margin:0;font-size:23px}
+.district p{margin:8px 0}
+.district button{background:white;color:#172c4d;border:0;border-radius:5px;padding:9px 18px;font-weight:700;cursor:pointer}
+.section-title{border-left:5px solid #d92e40;padding-left:12px;margin:30px 0 18px;font-size:20px}
+.news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.news-card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px #172c4d12}
+.news-image{height:145px;background:linear-gradient(135deg,#dce5f2,#b7c9e0);display:flex;align-items:center;justify-content:center;color:#536781;font-size:36px}
+.news-content{padding:15px}
+.news-content h3{font-size:16px;line-height:1.8;margin:8px 0}
+.news-content p{font-size:13px;color:#657188;line-height:1.8}
+.tag{font-size:11px;color:#c32238;font-weight:700}
+.date{font-size:11px;color:#8993a4}
+footer{background:#102447;color:white;text-align:center;padding:28px 15px;margin-top:35px}
+footer p{font-size:13px;color:#cbd8ed}
+@media(max-width:700px){
+ .brand{font-size:22px}
+ .districts{grid-template-columns:1fr}
+ .news-grid{grid-template-columns:1fr}
+ nav{gap:14px}
+ .welcome h1{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="brand">360+ <span>DIGITAL NEWS</span></div>
+ <div class="tagline">உண்மையின் குரல் • மக்களின் செய்தி</div>
+</header>
+
+<nav>
+ <a href="#">முகப்பு</a>
+ <a href="#tirupattur">திருப்பத்தூர்</a>
+ <a href="#ranipet">ராணிப்பேட்டை</a>
+ <a href="#government">அரசு செய்திகள்</a>
+ <a href="#videos">வீடியோ</a>
+ <a href="#contact">தொடர்பு</a>
+</nav>
+
+<div class="breaking">
+ <span>முக்கியச் செய்திகள்</span>
+ 360+ டிஜிட்டல் நியூஸ் – மாவட்டச் செய்திகள்
+</div>
+
+<main class="container">
+ <div class="welcome">
+  <h1>வணக்கம்! 360+ டிஜிட்டல் செய்தி உலகிற்கு வரவேற்கிறோம்</h1>
+  <p>உங்கள் மாவட்டத்தின் செய்திகள் உங்கள் விரல் நுனியில்!</p>
+ </div>
+
+ <div class="districts">
+  <section class="district tir" id="tirupattur">
+   <h2>TIRUPATTUR 360+</h2>
+   <p>திருப்பத்தூர் மாவட்டச் செய்திகள்</p>
+   <button onclick="showDistrict('திருப்பத்தூர்')">செய்திகளைப் பார்க்க</button>
+  </section>
+  <section class="district rpt" id="ranipet">
+   <h2>RPT 360+</h2>
+   <p>ராணிப்பேட்டை மாவட்டச் செய்திகள்</p>
+   <button onclick="showDistrict('ராணிப்பேட்டை')">செய்திகளைப் பார்க்க</button>
+  </section>
+ </div>
+
+ <h2 class="section-title" id="government">அரசு செய்திகள்</h2>
+ <div class="news-grid" id="news">
+  <article class="news-card">
+   <div class="news-image">📰</div>
+   <div class="news-content">
+    <span class="tag">திருப்பத்தூர்</span>
+    <h3>அரசு செய்திகளுக்காக காத்திருக்கிறது</h3>
+    <p>அதிகாரப்பூர்வ அரசு அறிவிப்புகள் இங்கு வெளியிடப்படும்.</p>
+    <span class="date">செய்தி விரைவில்</span>
+   </div>
+  </article>
+  <article class="news-card">
+   <div class="news-image">🏛️</div>
+   <div class="news-content">
+    <span class="tag">ராணிப்பேட்டை</span>
+    <h3>மாவட்ட அரசு அறிவிப்புகள்</h3>
+    <p>ராணிப்பேட்டை மாவட்டத்தின் அரசு செய்திகளுக்கான பகுதி.</p>
+    <span class="date">செய்தி விரைவில்</span>
+   </div>
+  </article>
+  <article class="news-card" id="videos">
+   <div class="news-image">▶</div>
+   <div class="news-content">
+    <span class="tag">வீடியோ செய்திகள்</span>
+    <h3>360+ வீடியோ செய்திகள்</h3>
+    <p>முக்கிய நிகழ்வுகளின் வீடியோ செய்திகள் இங்கு இடம்பெறும்.</p>
+    <span class="date">விரைவில்</span>
+   </div>
+  </article>
+ </div>
+</main>
+
+<footer id="contact">
+ <div class="brand">360+ DIGITAL NEWS</div>
+ <p>TIRUPATTUR 360+ | RPT 360+</p>
+ <p>தமிழ் டிஜிட்டல் செய்தித் தளம்</p>
+ <p>© 2026 360+ DIGITAL NEWS</p>
+</footer>
+
+<script>
+function showDistrict(name){
+ alert(name+" மாவட்டச் செய்திகள் விரைவில் இங்கு காணலாம்.");
+}
+</script>
+</body>
+</html>
