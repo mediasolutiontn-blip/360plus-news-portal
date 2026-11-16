@@ -197,7 +197,18 @@ function renderNews(news, district, targetId){
  target.innerHTML = filtered.slice().reverse().map(item => {
   const title = safeText(item["Title"] || "தலைப்பு இல்லை");
   const details = safeText(item["Details"] || "");
-  const date = safeText(item["Date"] || "");
+  const rawDate = item["Date"] || "";
+const dateObj = new Date(rawDate);
+const date = isNaN(dateObj.getTime()) ? safeText(rawDate) :
+  dateObj.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
   const imageUrl = String(item["Image URL"] || "").trim();
 
   const image = imageUrl
