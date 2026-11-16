@@ -41,6 +41,10 @@ nav a:hover{color:#ffcf38}
 .news-content{padding:15px}
 .news-content h3{font-size:16px;line-height:1.8;margin:8px 0}
 .news-content p{font-size:13px;color:#657188;line-height:1.8;white-space:pre-wrap}
+.news-details{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden}
+.news-details.expanded{display:block;-webkit-line-clamp:unset;overflow:visible}
+.see-more-btn{margin-top:8px;padding:6px 12px;border:0;border-radius:5px;background:#183e80;color:white;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.see-more-btn:hover{background:#102447}
 .tag{font-size:11px;color:#c32238;font-weight:700}
 .date{font-size:11px;color:#8993a4}
 .status-message{background:white;padding:18px;border-radius:8px;color:#657188;text-align:center}
@@ -181,6 +185,13 @@ function safeText(value){
  });
 }
 
+function toggleNewsDetails(button){
+ const details = button.previousElementSibling;
+ if (!details) return;
+ const expanded = details.classList.toggle("expanded");
+ button.textContent = expanded ? "சுருக்கமாக்க" : "மேலும் படிக்க";
+}
+
 function renderNews(news, district, targetId){
  const target = document.getElementById(targetId);
 
@@ -221,12 +232,23 @@ function renderNews(news, district, targetId){
     <div class="news-content">
      <span class="tag">${safeText(district)}</span>
      <h3>${title}</h3>
-     <p>${details}</p>
+     <p class="news-details">${details}</p>
+     <button type="button" class="see-more-btn" style="display:none" onclick="toggleNewsDetails(this)">மேலும் படிக்க</button>
      <span class="date">${dateTime}</span>
     </div>
    </article>
   `;
  }).join("");
+
+ // ஐந்து வரிகளுக்கு மேல் உள்ள செய்திகளுக்கு மட்டும் "மேலும் படிக்க" காட்டவும்
+ target.querySelectorAll(".news-card").forEach(card => {
+  const detailsElement = card.querySelector(".news-details");
+  const button = card.querySelector(".see-more-btn");
+  if (detailsElement && button) {
+   button.style.display = detailsElement.scrollHeight > detailsElement.clientHeight + 1
+     ? "inline-block" : "none";
+  }
+ });
 }
 
 
