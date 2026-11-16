@@ -3,277 +3,168 @@
 <html lang="ta">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>360+ NEWS ADMIN PANEL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>360+ News Admin</title>
 
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f1f4f9;
- color:#182238;
+body {
+  margin: 0;
+  padding: 25px;
+  background: #eef2f7;
+  font-family: Arial, sans-serif;
 }
-.login{
- max-width:420px;
- margin:80px auto;
- background:white;
- padding:28px;
- border-radius:14px;
- box-shadow:0 4px 20px #ccc;
+.container {
+  max-width: 650px;
+  margin: 30px auto;
+  background: white;
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px #0002;
 }
-h2,h3{text-align:center}
-input,select,textarea{
- width:100%;
- padding:13px;
- margin:10px 0;
- border:1px solid #ccc;
- border-radius:7px;
- font-size:16px;
+h2 {
+  text-align: center;
+  color: #0756a5;
 }
-button{
- width:100%;
- padding:14px;
- background:#0878d1;
- color:white;
- border:0;
- border-radius:7px;
- cursor:pointer;
- font-size:16px;
- font-weight:bold;
+label {
+  display: block;
+  margin-top: 16px;
+  font-weight: bold;
 }
-button:hover{background:#005da8}
-.dashboard{
- display:none;
- max-width:850px;
- margin:25px auto;
- padding:20px;
+input, select, textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px;
+  margin-top: 7px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 16px;
 }
-.card{
- background:white;
- padding:24px;
- border-radius:12px;
- box-shadow:0 3px 12px #ddd;
+textarea {
+  min-height: 130px;
 }
-.logout{
- background:#d83232;
- margin-bottom:15px;
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 7px;
+  background: #087bd1;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
 }
-#photoPreview{
- display:none;
- width:100%;
- max-height:300px;
- object-fit:contain;
- margin:10px 0;
- border-radius:8px;
+.status {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 18px;
 }
-.status{
- margin-top:15px;
- text-align:center;
- font-weight:bold;
-}
-.note{
- color:#666;
- font-size:13px;
+#newsPanel {
+  display: none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="login" id="login">
-<h2>360+ DIGITAL NEWS</h2>
-<h3>ADMIN LOGIN</h3>
+<div class="container" id="loginPanel">
+  <h2>360+ NEWS ADMIN LOGIN</h2>
 
-<input id="username" placeholder="Username">
-<input id="password" type="password" placeholder="Password">
+  <label>Username</label>
+  <input id="username" type="text">
 
-<button type="button" onclick="loginAdmin()">LOGIN</button>
-<p id="loginStatus" class="status"></p>
+  <label>Password</label>
+  <input id="password" type="password">
+
+  <button type="button" onclick="login()">LOGIN</button>
+  <p class="status" id="loginStatus"></p>
 </div>
 
-<div class="dashboard" id="dashboard">
+<div class="container" id="newsPanel">
+  <h2>360+ NEWS – ADMIN PANEL</h2>
 
-<button class="logout" onclick="logoutAdmin()">LOGOUT</button>
+  <form id="newsForm"
+    action="https://script.google.com/macros/s/AKfycbwaMAnLd3ZmSstOjSTV1S-ZBsOq84ZffXj43e3fzXWezihIgILOH7Ld-BJogmlMR0wz/exec"
+    method="POST"
+    target="submitFrame">
 
-<div class="card">
-<h2>360+ NEWS ADMIN PANEL</h2>
+    <label>மாவட்டம்</label>
+    <select name="district" required>
+      <option value="">மாவட்டத்தைத் தேர்வு செய்யவும்</option>
+      <option value="திருப்பத்தூர்">திருப்பத்தூர்</option>
+      <option value="ராணிப்பேட்டை">ராணிப்பேட்டை</option>
+    </select>
 
-<form id="newsForm"
- action="https://script.google.com/macros/s/AKfycbwaMAnLd3ZmSstOjSTV1S-ZBsOq84ZffXj43e3fzXWezihIgILOH7Ld-BJogmlMR0wz/exec"
- method="POST"
- target="submitFrame">
+    <label>செய்தி தலைப்பு</label>
+    <input name="title" type="text"
+      placeholder="செய்தி தலைப்பு" required>
 
-<label>மாவட்டம்</label>
-<select name="district" required>
-<option value="">மாவட்டத்தைத் தேர்வு செய்யவும்</option>
-<option value="திருப்பத்தூர்">திருப்பத்தூர்</option>
-<option value="ராணிப்பேட்டை">ராணிப்பேட்டை</option>
-</select>
+    <label>செய்தி விவரம்</label>
+    <textarea name="details"
+      placeholder="செய்தி விவரங்களை எழுதவும்"></textarea>
 
-<label>செய்தி தலைப்பு</label>
-<input name="title" placeholder="செய்தி தலைப்பு" required>
+    <label>புகைப்பட URL</label>
+    <input name="imageUrl" type="url"
+      placeholder="புகைப்பட URL (விருப்பமானது)">
 
-<label>செய்தி விவரம்</label>
-<textarea name="details" rows="6"
-placeholder="செய்தி விவரங்களை எழுதவும்"></textarea>
+    <label>செய்தி தேதி</label>
+    <input name="date" type="date" id="newsDate" required>
 
-<label>செய்தி புகைப்படம்</label>
-<input type="file" id="photoFile" accept="image/*">
+    <button type="submit" id="submitButton">
+      செய்தியை Submit செய்யவும்
+    </button>
+  </form>
 
-<img id="photoPreview" alt="Photo Preview">
-
-<p class="note">
-புகைப்பட அளவு 2.5 MB-க்குள் இருக்க வேண்டும்.
-</p>
-
-<input type="hidden" name="imageBase64" id="imageBase64">
-<input type="hidden" name="imageName" id="imageName">
-<input type="hidden" name="imageType" id="imageType">
-
-<label>செய்தி தேதி</label>
-<input type="date" name="date" id="newsDate" required>
-
-<button type="submit" id="submitButton">
-செய்தியை Upload & Submit செய்யவும்
-</button>
-
-</form>
-
-<p id="submitStatus" class="status"></p>
-
-<iframe name="submitFrame" id="submitFrame"
- style="display:none"></iframe>
-
-</div>
+  <p class="status" id="submitStatus"></p>
+  <iframe name="submitFrame" id="submitFrame"
+    style="display:none"></iframe>
 </div>
 
 <script>
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "360plus@2026";
+function login() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
 
-function loginAdmin(){
- const user = document.getElementById("username").value;
- const pass = document.getElementById("password").value;
+  if (user === "admin" && pass === "360plus@2026") {
+    document.getElementById("loginPanel").style.display = "none";
+    document.getElementById("newsPanel").style.display = "block";
+    setToday();
+  } else {
+    document.getElementById("loginStatus").textContent =
+      "Username அல்லது Password தவறு.";
+  }
+}
 
- if(user === ADMIN_USER && pass === ADMIN_PASS){
-  document.getElementById("login").style.display="none";
-  document.getElementById("dashboard").style.display="block";
+function setToday() {
+  const today = new Date();
+  const localDate = new Date(
+    today.getTime() - today.getTimezoneOffset() * 60000
+  ).toISOString().split("T")[0];
+
+  document.getElementById("newsDate").value = localDate;
+}
+
+let submitting = false;
+
+document.getElementById("newsForm").addEventListener("submit", function() {
+  submitting = true;
+  document.getElementById("submitButton").disabled = true;
+  document.getElementById("submitStatus").textContent =
+    "செய்தி அனுப்பப்படுகிறது...";
+});
+
+document.getElementById("submitFrame").addEventListener("load", function() {
+  if (!submitting) return;
+
+  submitting = false;
+
+  document.getElementById("submitStatus").textContent =
+    "அனுப்பும் கோரிக்கை முடிந்தது. Google Sheet-ல் சரிபார்க்கவும்.";
+
+  document.getElementById("newsForm").reset();
   setToday();
- }else{
-  document.getElementById("loginStatus").textContent =
-   "தவறான Username அல்லது Password";
- }
-}
 
-function logoutAdmin(){
- document.getElementById("dashboard").style.display="none";
- document.getElementById("login").style.display="block";
- document.getElementById("password").value="";
-}
-
-function setToday(){
- const now = new Date();
- const localDate = new Date(
-  now.getTime() - now.getTimezoneOffset()*60000
- ).toISOString().slice(0,10);
-
- document.getElementById("newsDate").value=localDate;
-}
-
-const photoFile = document.getElementById("photoFile");
-
-photoFile.addEventListener("change",function(){
- const file=this.files[0];
- const preview=document.getElementById("photoPreview");
-
- if(!file){
-  preview.style.display="none";
-  return;
- }
-
- if(!file.type.startsWith("image/")){
-  alert("புகைப்படத்தை மட்டும் தேர்வு செய்யவும்.");
-  this.value="";
-  return;
- }
-
- if(file.size > 2.5 * 1024 * 1024){
-  alert("புகைப்படம் 2.5 MB-க்கு குறைவாக இருக்க வேண்டும்.");
-  this.value="";
-  return;
- }
-
- preview.src=URL.createObjectURL(file);
- preview.style.display="block";
-});
-
-let submitting=false;
-
-document.getElementById("newsForm")
-.addEventListener("submit",function(event){
-
- event.preventDefault();
-
- if(submitting)return;
-
- const form=this;
- const file=photoFile.files[0];
- const status=document.getElementById("submitStatus");
- const button=document.getElementById("submitButton");
-
- status.textContent="செய்தி தயாராகிறது...";
- button.disabled=true;
-
- function sendForm(){
-  submitting=true;
-  status.textContent="செய்தி Upload செய்யப்படுகிறது...";
-  form.submit();
- }
-
- if(file){
-  const reader=new FileReader();
-
-  reader.onload=function(){
-   document.getElementById("imageBase64").value=reader.result;
-   document.getElementById("imageName").value=file.name;
-   document.getElementById("imageType").value=file.type;
-   sendForm();
-  };
-
-  reader.onerror=function(){
-   status.textContent="புகைப்படத்தை வாசிக்க முடியவில்லை.";
-   button.disabled=false;
-  };
-
-  reader.readAsDataURL(file);
-
- }else{
-  document.getElementById("imageBase64").value="";
-  document.getElementById("imageName").value="";
-  document.getElementById("imageType").value="";
-  sendForm();
- }
-});
-
-document.getElementById("submitFrame")
-.addEventListener("load",function(){
-
- if(!submitting)return;
-
- document.getElementById("submitStatus").textContent =
-  "செய்தி அனுப்பப்பட்டது. Google Sheet-ல் Pending நிலையில் சரிபார்க்கவும்.";
-
- document.getElementById("newsForm").reset();
- document.getElementById("photoPreview").style.display="none";
- document.getElementById("imageBase64").value="";
- document.getElementById("imageName").value="";
- document.getElementById("imageType").value="";
-
- setToday();
-
- document.getElementById("submitButton").disabled=false;
- submitting=false;
+  document.getElementById("submitButton").disabled = false;
 });
 </script>
 
