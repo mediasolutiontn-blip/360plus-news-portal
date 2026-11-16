@@ -198,17 +198,17 @@ function renderNews(news, district, targetId){
   const title = safeText(item["Title"] || "தலைப்பு இல்லை");
   const details = safeText(item["Details"] || "");
   const rawDate = item["Date"] || "";
-const dateObj = new Date(rawDate);
-const date = isNaN(dateObj.getTime()) ? safeText(rawDate) :
-  dateObj.toLocaleString("en-IN", {
-    timeZone: "Asia/Kolkata",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true
-  });
+  const date = safeText(rawDate);
+  const createdAt = String(item["Created At"] || "");
+  const timeMatch = createdAt.match(/(?:\\s|T)(\\d{1,2}):(\\d{2})(?::\\d{2})?/);
+  let time = "";
+  if (timeMatch) {
+   const hour24 = Number(timeMatch[1]);
+   const hour12 = hour24 % 12 || 12;
+   const ampm = hour24 >= 12 ? "PM" : "AM";
+   time = String(hour12).padStart(2, "0") + ":" + timeMatch[2] + " " + ampm;
+  }
+  const dateTime = date + (time ? ", " + time : "");
   const imageUrl = String(item["Image URL"] || "").trim();
 
   const image = imageUrl
@@ -222,7 +222,7 @@ const date = isNaN(dateObj.getTime()) ? safeText(rawDate) :
      <span class="tag">${safeText(district)}</span>
      <h3>${title}</h3>
      <p>${details}</p>
-     <span class="date">${date}</span>
+     <span class="date">${dateTime}</span>
     </div>
    </article>
   `;
