@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>360+ DIGITAL NEWS | தமிழ் செய்திகள்</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f3f5f9;color:#182238;font-family:'Noto Sans Tamil',sans-serif}
@@ -35,15 +36,17 @@ nav a:hover{color:#ffcf38}
 .section-title{border-left:5px solid #d92e40;padding-left:12px;margin:30px 0 18px;font-size:20px}
 .news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .news-card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px #172c4d12}
-.news-image{height:145px;background:linear-gradient(135deg,#dce5f2,#b7c9e0);display:flex;align-items:center;justify-content:center;color:#536781;font-size:36px}
+.news-image{height:190px;background:linear-gradient(135deg,#dce5f2,#b7c9e0);display:flex;align-items:center;justify-content:center;overflow:hidden;color:#536781;font-size:36px}
+.news-image img{width:100%;height:100%;object-fit:cover}
 .news-content{padding:15px}
 .news-content h3{font-size:16px;line-height:1.8;margin:8px 0}
-.news-content p{font-size:13px;color:#657188;line-height:1.8}
+.news-content p{font-size:13px;color:#657188;line-height:1.8;white-space:pre-wrap}
 .tag{font-size:11px;color:#c32238;font-weight:700}
 .date{font-size:11px;color:#8993a4}
+.status-message{background:white;padding:18px;border-radius:8px;color:#657188;text-align:center}
 footer{background:#102447;color:white;text-align:center;padding:28px 15px;margin-top:35px}
 footer p{font-size:13px;color:#cbd8ed}
-@media(max-width:600px){
+@media(max-width:700px){
  .header-inner{gap:7px}
  .logo{width:68px;height:68px}
  .brand h1{font-size:17px}
@@ -55,6 +58,7 @@ footer p{font-size:13px;color:#cbd8ed}
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -83,6 +87,7 @@ footer p{font-size:13px;color:#cbd8ed}
 </div>
 
 <main class="container">
+
  <div class="welcome">
   <h2>360+ டிஜிட்டல் செய்தி உலகிற்கு வரவேற்கிறோம்</h2>
   <p>உங்கள் மாவட்டத்தின் செய்திகள் உங்கள் விரல் நுனியில்!</p>
@@ -92,98 +97,64 @@ footer p{font-size:13px;color:#cbd8ed}
   <section class="district tir" id="tirupattur">
    <h2>TIRUPATTUR 360+</h2>
    <p>திருப்பத்தூர் மாவட்டச் செய்திகள்</p>
-   <button onclick="showDistrict('திருப்பத்தூர்')">செய்திகளைப் பார்க்க</button>
+   <button onclick="document.getElementById('tir-news').scrollIntoView({behavior:'smooth'})">செய்திகளைப் பார்க்க</button>
   </section>
+
   <section class="district rpt" id="ranipet">
    <h2>RPT 360+</h2>
    <p>ராணிப்பேட்டை மாவட்டச் செய்திகள்</p>
-   <button onclick="showDistrict('ராணிப்பேட்டை')">செய்திகளைப் பார்க்க</button>
+   <button onclick="document.getElementById('rpt-news').scrollIntoView({behavior:'smooth'})">செய்திகளைப் பார்க்க</button>
   </section>
  </div>
 
- 
-<h2 class="section-title" id="government">திருப்பத்தூர் மாவட்ட அரசு செய்திகள்</h2>
-<div class="news-grid" style="grid-template-columns:1fr;">
-  <article class="news-card">
-    <div class="news-image">
-      <img src="tirupattur-collector.jpg" alt="திருப்பத்தூர் மாவட்ட ஆட்சியர் அலுவலகம்" style="width:100%;height:100%;object-fit:cover;">
-    </div>
-    <div class="news-content">
-      <span class="tag">திருப்பத்தூர்</span>
-      <h3>அரசு செய்திகள்</h3>
-      <p>திருப்பத்தூர் மாவட்ட ஆட்சியர் அலுவலகத்தின் அரசு அறிவிப்புகள் மற்றும் முக்கிய செய்திகள்.</p>
-      <span class="date">செய்திகள் விரைவில்</span>
-    </div>
-  </article>
-</div>
+ <h2 class="section-title" id="government">திருப்பத்தூர் மாவட்ட செய்திகள்</h2>
+ <div class="news-grid" id="tir-news">
+  <div class="status-message">செய்திகள் ஏற்றப்படுகின்றன...</div>
+ </div>
 
-<h2 class="section-title">ராணிப்பேட்டை மாவட்ட அரசு செய்திகள்</h2>
-<div class="news-grid" style="grid-template-columns:1fr;">
-  <article class="news-card">
-    <div class="news-image">
-      <img src="ranipet-collector.jpg" alt="ராணிப்பேட்டை மாவட்ட ஆட்சியர் அலுவலகம்" style="width:100%;height:100%;object-fit:cover;">
-    </div>
-    <div class="news-content">
-      <span class="tag">ராணிப்பேட்டை</span>
-      <h3>மாவட்ட அரசு அறிவிப்புகள்</h3>
-      <p>ராணிப்பேட்டை மாவட்ட ஆட்சியர் அலுவலகத்தின் அரசு அறிவிப்புகள் மற்றும் முக்கிய செய்திகள்.</p>
-      <span class="date">செய்திகள் விரைவில்</span>
-    </div>
-  </article>
-</div>
+ <h2 class="section-title">ராணிப்பேட்டை மாவட்ட செய்திகள்</h2>
+ <div class="news-grid" id="rpt-news">
+  <div class="status-message">செய்திகள் ஏற்றப்படுகின்றன...</div>
+ </div>
 
-<article class="news-card" id="videos">
+ <article class="news-card" id="videos" style="margin-top:30px">
   <div class="news-image">▶</div>
   <div class="news-content">
-    <span class="tag">வீடியோ செய்திகள்</span>
-    <h3>360+ வீடியோ செய்திகள்</h3>
-    <p>முக்கிய நிகழ்வுகளின் வீடியோ செய்திகள் இங்கு இடம்பெறும்.</p>
-    <span class="date">விரைவில்</span>
+   <span class="tag">வீடியோ செய்திகள்</span>
+   <h3>360+ வீடியோ செய்திகள்</h3>
+   <p>முக்கிய நிகழ்வுகளின் வீடியோ செய்திகள் இங்கு இடம்பெறும்.</p>
+   <span class="date">விரைவில்</span>
   </div>
-</article>
+ </article>
 
 </main>
 
 <section style="max-width:1200px;margin:35px auto;padding:20px 15px;">
-  <h2 style="border-left:5px solid #e62117;padding-left:12px;color:#182238;">
-    யூடியூப் சேனல்கள்
-  </h2>
+ <h2 style="border-left:5px solid #e62117;padding-left:12px;color:#182238;">யூடியூப் சேனல்கள்</h2>
 
-  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;">
+ <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;">
 
-    <div style="background:white;padding:22px;border-radius:12px;text-align:center;box-shadow:0 3px 12px #0001;">
-      <h2 style="color:#183e80;">TIRUPATTUR 360+</h2>
-      <p>திருப்பத்தூர் மாவட்டச் செய்திகள்</p>
-      <a href="https://www.youtube.com/@tirupattur360plus"
-         target="_blank"
-         style="display:inline-block;background:#e62117;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">
-        ▶ யூடியூப் சேனலைப் பார்க்க
-      </a>
-      <br><br>
-      <a href="https://www.youtube.com/@tirupattur360plus?sub_confirmation=1"
-         target="_blank">Subscribe செய்யுங்கள்</a>
-      <br><br>
-      <a href="https://www.youtube.com/@tirupattur360plus/live"
-         target="_blank">நேரலை பார்க்க</a>
-    </div>
-
-    <div style="background:white;padding:22px;border-radius:12px;text-align:center;box-shadow:0 3px 12px #0001;">
-      <h2 style="color:#b82035;">RPT 360+</h2>
-      <p>ராணிப்பேட்டை மாவட்டச் செய்திகள்</p>
-      <a href="https://www.youtube.com/@rpt360plus"
-         target="_blank"
-         style="display:inline-block;background:#e62117;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">
-        ▶ யூடியூப் சேனலைப் பார்க்க
-      </a>
-      <br><br>
-      <a href="https://www.youtube.com/@rpt360plus?sub_confirmation=1"
-         target="_blank">Subscribe செய்யுங்கள்</a>
-      <br><br>
-      <a href="https://www.youtube.com/@rpt360plus/live"
-         target="_blank">நேரலை பார்க்க</a>
-    </div>
-
+  <div style="background:white;padding:22px;border-radius:12px;text-align:center;box-shadow:0 3px 12px #0001;">
+   <h2 style="color:#183e80;">TIRUPATTUR 360+</h2>
+   <p>திருப்பத்தூர் மாவட்டச் செய்திகள்</p>
+   <a href="https://www.youtube.com/@tirupattur360plus" target="_blank" style="display:inline-block;background:#e62117;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">▶ யூடியூப் சேனலைப் பார்க்க</a>
+   <br><br>
+   <a href="https://www.youtube.com/@tirupattur360plus?sub_confirmation=1" target="_blank">Subscribe செய்யுங்கள்</a>
+   <br><br>
+   <a href="https://www.youtube.com/@tirupattur360plus/live" target="_blank">நேரலை பார்க்க</a>
   </div>
+
+  <div style="background:white;padding:22px;border-radius:12px;text-align:center;box-shadow:0 3px 12px #0001;">
+   <h2 style="color:#b82035;">RPT 360+</h2>
+   <p>ராணிப்பேட்டை மாவட்டச் செய்திகள்</p>
+   <a href="https://www.youtube.com/@rpt360plus" target="_blank" style="display:inline-block;background:#e62117;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">▶ யூடியூப் சேனலைப் பார்க்க</a>
+   <br><br>
+   <a href="https://www.youtube.com/@rpt360plus?sub_confirmation=1" target="_blank">Subscribe செய்யுங்கள்</a>
+   <br><br>
+   <a href="https://www.youtube.com/@rpt360plus/live" target="_blank">நேரலை பார்க்க</a>
+  </div>
+
+ </div>
 </section>
 
 <footer id="contact">
@@ -196,9 +167,81 @@ footer p{font-size:13px;color:#cbd8ed}
 </footer>
 
 <script>
-function showDistrict(name){
- alert(name+" மாவட்டச் செய்திகள் விரைவில் இங்கு காணலாம்.");
+const NEWS_API = "https://script.google.com/macros/s/AKfycbwaMAnLd3ZmSstOjSTV1S-ZBsOq84ZffXj43e3fzXWezihIgILOH7Ld-BJogmlMR0wz/exec";
+
+function safeText(value){
+ return String(value ?? "").replace(/[&<>"']/g, function(ch){
+  return {
+   "&":"&amp;",
+   "<":"&lt;",
+   ">":"&gt;",
+   '"':"&quot;",
+   "'":"&#39;"
+  }[ch];
+ });
 }
+
+function renderNews(news, district, targetId){
+ const target = document.getElementById(targetId);
+
+ const filtered = news.filter(item =>
+  String(item["District"] || "").trim() === district &&
+  String(item["Status"] || "").trim().toLowerCase() === "published"
+ );
+
+ if(filtered.length === 0){
+  target.innerHTML = '<div class="status-message">தற்போது வெளியிடப்பட்ட செய்திகள் இல்லை.</div>';
+  return;
+ }
+
+ target.innerHTML = filtered.slice().reverse().map(item => {
+  const title = safeText(item["Title"] || "தலைப்பு இல்லை");
+  const details = safeText(item["Details"] || "");
+  const date = safeText(item["Date"] || "");
+  const imageUrl = String(item["Image URL"] || "").trim();
+
+  const image = imageUrl
+   ? '<div class="news-image"><img src="' + safeText(imageUrl) + '" alt="' + title + '" onerror="this.parentElement.innerHTML=\'📰\'"></div>'
+   : '<div class="news-image">📰</div>';
+
+  return `
+   <article class="news-card">
+    ${image}
+    <div class="news-content">
+     <span class="tag">${safeText(district)}</span>
+     <h3>${title}</h3>
+     <p>${details}</p>
+     <span class="date">${date}</span>
+    </div>
+   </article>
+  `;
+ }).join("");
+}
+
+async function loadNews(){
+ const tir = document.getElementById("tir-news");
+ const rpt = document.getElementById("rpt-news");
+
+ try{
+  const response = await fetch(NEWS_API, {cache:"no-store"});
+  if(!response.ok) throw new Error("HTTP " + response.status);
+
+  const news = await response.json();
+  if(!Array.isArray(news)) throw new Error("சரியான செய்தி தரவு கிடைக்கவில்லை");
+
+  renderNews(news, "திருப்பத்தூர்", "tir-news");
+  renderNews(news, "ராணிப்பேட்டை", "rpt-news");
+
+ }catch(error){
+  console.error("News loading error:", error);
+  tir.innerHTML = '<div class="status-message">செய்திகளைப் பெற முடியவில்லை. இணைய இணைப்பைச் சரிபார்க்கவும்.</div>';
+  rpt.innerHTML = '<div class="status-message">செய்திகளைப் பெற முடியவில்லை. இணைய இணைப்பைச் சரிபார்க்கவும்.</div>';
+ }
+}
+
+loadNews();
+setInterval(loadNews, 60000);
 </script>
+
 </body>
 </html>
