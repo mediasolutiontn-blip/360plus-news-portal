@@ -4,17 +4,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>360+ Admin Panel</title>
+<title>360+ NEWS ADMIN PANEL</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f1f4f9;color:#182238}
-.login{max-width:400px;margin:100px auto;background:white;padding:30px;border-radius:15px;box-shadow:0 5px 25px #ccc}
+.login{max-width:420px;margin:80px auto;background:white;padding:28px;border-radius:14px;box-shadow:0 4px 20px #ccc}
 h2{text-align:center;color:#102447}
 input,select,textarea{width:100%;padding:13px;margin:10px 0;border:1px solid #ccc;border-radius:7px;font-size:16px}
 button{background:#c82032;color:white;border:0;padding:13px 20px;border-radius:7px;cursor:pointer;font-size:16px}
-.dashboard{display:none;padding:25px;max-width:900px;margin:auto}
-.card{background:white;padding:25px;border-radius:12px;margin:20px 0;box-shadow:0 3px 12px #ddd}
+.dashboard{display:none;padding:22px;max-width:950px;margin:auto}
+.card{background:white;padding:24px;border-radius:12px;margin:20px 0;box-shadow:0 3px 12px #ddd}
 .logout{float:right;background:#555}
+.status{margin-top:15px;font-weight:bold}
 </style>
 </head>
 <body>
@@ -24,83 +25,78 @@ button{background:#c82032;color:white;border:0;padding:13px 20px;border-radius:7
 <h3 style="text-align:center">ADMIN LOGIN</h3>
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
-<button onclick="loginAdmin()" style="width:100%">LOGIN</button>
-<p id="error" style="color:red;text-align:center"></p>
+<button onclick="loginNow()" style="width:100%">LOGIN</button>
+<p id="loginError" style="color:red"></p>
 </div>
 
 <div class="dashboard" id="dashboard">
-<button class="logout" onclick="logout()">Logout</button>
+<button class="logout" onclick="logoutNow()">Logout</button>
 <h2>360+ NEWS ADMIN DASHBOARD</h2>
 <p>Welcome Admin</p>
 
 <div class="card">
-<h3>புதிய செய்தி சேர்க்கவும்</h3>
+<h2>புதிய செய்தி சேர்க்கவும்</h2>
 
-<select id="district">
-<option>திருப்பத்தூர்</option>
-<option>ராணிப்பேட்டை</option>
+<form id="newsForm" target="submitFrame"
+action="https://script.google.com/macros/s/AKfycbwaMAnLd3ZmSstOjSTV1S-ZBsOq84ZffXj43e3fzXWezihIgILOH7Ld-BJogmlMR0wz/exec"
+method="POST">
+
+<label>மாவட்டம்</label>
+<select name="district" required>
+<option value="திருப்பத்தூர்">திருப்பத்தூர்</option>
+<option value="ராணிப்பேட்டை">ராணிப்பேட்டை</option>
 </select>
 
-<input id="title" placeholder="செய்தி தலைப்பு">
-<textarea id="details" rows="5" placeholder="செய்தி விவரம்"></textarea>
-<input id="photo" type="file" accept="image/*">
+<label>செய்தி தலைப்பு</label>
+<input name="title" placeholder="செய்தி தலைப்பு" required>
 
-<button onclick="saveNews()">SAVE NEWS</button>
-<p id="status"></p>
+<label>செய்தி விவரம்</label>
+<textarea name="details" rows="5" placeholder="செய்தி விவரம்" required></textarea>
+
+<label>புகைப்பட URL</label>
+<input name="imageUrl" placeholder="புகைப்படத்தின் இணைய முகவரி">
+
+<label>செய்தி தேதி</label>
+<input name="date" type="date" required>
+
+<button type="submit">SAVE NEWS</button>
+</form>
+
+<iframe name="submitFrame" id="submitFrame" style="display:none"></iframe>
+<p class="status" id="message"></p>
 </div>
 
 <div class="card">
-<h3>சேர்க்கப்பட்ட செய்திகள்</h3>
-<div id="newsList"></div>
+<h2>செய்தி வெளியீட்டு நிலை</h2>
+<p>சேமிக்கப்படும் செய்திகள் Google Sheet-ல் Pending நிலையில் இருக்கும். Sheet-ல் Status-ஐ Published என மாற்றிய பிறகே பொதுமக்கள் பக்கத்தில் வெளியாகும்.</p>
 </div>
 </div>
 
 <script>
-function loginAdmin(){
-let u=document.getElementById('username').value;
-let p=document.getElementById('password').value;
-
-if(u==="admin" && p==="360plus@2026"){
-document.getElementById('login').style.display="none";
-document.getElementById('dashboard').style.display="block";
-showNews();
-}else{
-document.getElementById('error').innerText="Login தவறு!";
+function loginNow(){
+ const u=document.getElementById("username").value;
+ const p=document.getElementById("password").value;
+ if(u==="admin" && p==="360plus@2026"){
+  document.getElementById("login").style.display="none";
+  document.getElementById("dashboard").style.display="block";
+ }else{
+  document.getElementById("loginError").textContent="தவறான Username அல்லது Password";
+ }
 }
+function logoutNow(){
+ document.getElementById("dashboard").style.display="none";
+ document.getElementById("login").style.display="block";
+ document.getElementById("password").value="";
 }
-
-function logout(){
-document.getElementById('dashboard').style.display="none";
-document.getElementById('login').style.display="block";
-}
-
-function saveNews(){
-let district=document.getElementById('district').value;
-let title=document.getElementById('title').value;
-let details=document.getElementById('details').value;
-
-if(!title || !details){
-alert("தலைப்பு மற்றும் செய்தி விவரம் தேவை");
-return;
-}
-
-let news=JSON.parse(localStorage.getItem('news360')||'[]');
-
-news.push({district,title,details,date:new Date().toLocaleDateString('ta-IN')});
-
-localStorage.setItem('news360',JSON.stringify(news));
-
-document.getElementById('status').innerText="News Saved!";
-document.getElementById('title').value="";
-document.getElementById('details').value="";
-showNews();
-}
-
-function showNews(){
-let news=JSON.parse(localStorage.getItem('news360')||'[]');
-document.getElementById('newsList').innerHTML=
-news.map(n=>`<p><b>${n.district} - ${n.title}</b><br>${n.details}</p><hr>`).join('');
-}
+document.getElementById("newsForm").addEventListener("submit",function(){
+ document.getElementById("message").style.color="#b77900";
+ document.getElementById("message").textContent="செய்தி அனுப்பப்படுகிறது...";
+});
+document.getElementById("submitFrame").addEventListener("load",function(){
+ document.getElementById("message").style.color="green";
+ document.getElementById("message").textContent="செய்தி அனுப்பப்பட்டது. Google Sheet-ல் சரிபார்க்கவும்.";
+ document.getElementById("newsForm").reset();
+});
 </script>
 </body>
 </html>
