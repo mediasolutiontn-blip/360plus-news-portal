@@ -4,64 +4,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>360+ News Admin</title>
+<title>360+ NEWS ADMIN</title>
 
 <style>
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
-  padding: 25px;
+  padding: 25px 15px;
   background: #eef2f7;
   font-family: Arial, sans-serif;
+  color: #172b4d;
 }
+
 .container {
-  max-width: 650px;
-  margin: 30px auto;
-  background: white;
+  max-width: 850px;
+  margin: 25px auto;
   padding: 28px;
-  border-radius: 12px;
-  box-shadow: 0 4px 18px #0002;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px #0002;
 }
+
 h2 {
   text-align: center;
   color: #0756a5;
+  margin-top: 5px;
 }
+
 label {
   display: block;
-  margin-top: 16px;
+  margin-top: 17px;
+  margin-bottom: 7px;
   font-weight: bold;
 }
+
 input, select, textarea {
   width: 100%;
-  box-sizing: border-box;
-  padding: 13px;
-  margin-top: 7px;
+  padding: 14px;
   border: 1px solid #ccc;
-  border-radius: 7px;
+  border-radius: 8px;
   font-size: 16px;
 }
+
 textarea {
-  min-height: 130px;
+  min-height: 145px;
+  resize: vertical;
 }
+
 button {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   margin-top: 20px;
-  border: 0;
-  border-radius: 7px;
+  border: none;
+  border-radius: 8px;
   background: #087bd1;
   color: white;
   font-size: 17px;
   font-weight: bold;
   cursor: pointer;
 }
+
+button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.note {
+  color: #666;
+  font-size: 13px;
+  margin-top: 7px;
+}
+
 .status {
   text-align: center;
   font-weight: bold;
   margin-top: 18px;
 }
-#newsPanel {
-  display: none;
-}
+
+#newsPanel { display: none; }
 </style>
 </head>
 
@@ -103,12 +124,16 @@ button {
     <textarea name="details"
       placeholder="செய்தி விவரங்களை எழுதவும்"></textarea>
 
-    <label>புகைப்பட URL</label>
+    <label>செய்தி புகைப்படம் – Image URL</label>
     <input name="imageUrl" type="url"
-      placeholder="புகைப்பட URL (விருப்பமானது)">
+      placeholder="https://example.com/photo.jpg">
+
+    <p class="note">
+      புகைப்படத்தின் நேரடி இணையதள URL-ஐ இங்கே Paste செய்யவும்.
+    </p>
 
     <label>செய்தி தேதி</label>
-    <input name="date" type="date" id="newsDate" required>
+    <input type="date" name="date" id="newsDate" required>
 
     <button type="submit" id="submitButton">
       செய்தியை Submit செய்யவும்
@@ -116,16 +141,17 @@ button {
   </form>
 
   <p class="status" id="submitStatus"></p>
+
   <iframe name="submitFrame" id="submitFrame"
     style="display:none"></iframe>
 </div>
 
 <script>
 function login() {
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
 
-  if (user === "admin" && pass === "360plus@2026") {
+  if (username === "admin" && password === "360plus@2026") {
     document.getElementById("loginPanel").style.display = "none";
     document.getElementById("newsPanel").style.display = "block";
     setToday();
@@ -136,18 +162,19 @@ function login() {
 }
 
 function setToday() {
-  const today = new Date();
-  const localDate = new Date(
-    today.getTime() - today.getTimezoneOffset() * 60000
-  ).toISOString().split("T")[0];
+  const now = new Date();
+  const today = new Date(
+    now.getTime() - now.getTimezoneOffset() * 60000
+  ).toISOString().slice(0, 10);
 
-  document.getElementById("newsDate").value = localDate;
+  document.getElementById("newsDate").value = today;
 }
 
 let submitting = false;
 
 document.getElementById("newsForm").addEventListener("submit", function() {
   submitting = true;
+
   document.getElementById("submitButton").disabled = true;
   document.getElementById("submitStatus").textContent =
     "செய்தி அனுப்பப்படுகிறது...";
