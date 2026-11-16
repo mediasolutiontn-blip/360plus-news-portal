@@ -229,26 +229,43 @@ const date = isNaN(dateObj.getTime()) ? safeText(rawDate) :
  }).join("");
 }
 
-async function loadNews(){
- const tir = document.getElementById("tir-news");
- const rpt = document.getElementById("rpt-news");
 
- try{
-  const response = await fetch(NEWS_API, {cache:"no-store"});
-  if(!response.ok) throw new Error("HTTP " + response.status);
+window.receive360News = function(news) {
+  const tir = document.getElementById("tir-news");
+  const rpt = document.getElementById("rpt-news");
 
-  const news = await response.json();
-  if(!Array.isArray(news)) throw new Error("சரியான செய்தி தரவு கிடைக்கவில்லை");
+  if (!Array.isArray(news)) {
+    tir.innerHTML = "செய்தித் தரவு கிடைக்கவில்லை.";
+    rpt.innerHTML = "செய்தித் தரவு கிடைக்கவில்லை.";
+    return;
+  }
 
   renderNews(news, "திருப்பத்தூர்", "tir-news");
   renderNews(news, "ராணிப்பேட்டை", "rpt-news");
 
- }catch(error){
-  console.error("News loading error:", error);
-  tir.innerHTML = '<div class="status-message">செய்திகளைப் பெற முடியவில்லை. இணைய இணைப்பைச் சரிபார்க்கவும்.</div>';
-  rpt.innerHTML = '<div class="status-message">செய்திகளைப் பெற முடியவில்லை. இணைய இணைப்பைச் சரிபார்க்கவும்.</div>';
- }
+  const oldScript = document.getElementById("news-api-script");
+  if (oldScript) oldScript.remove();
+};
+
+async function loadNews() {
+  const oldScript = document.getElementById("news-api-script");
+  if (oldScript) oldScript.remove();
+
+  const script = document.createElement("script");
+  script.id = "news-api-script";
+  script.src = NEWS_API + "?callback=receive360News&_=" + Date.now();
+
+  script.onerror = function() {
+    document.getElementById("tir-news").innerHTML =
+      "செய்திகளைப் பெற முடியவில்லை. மீண்டும் முயற்சிக்கவும்.";
+    document.getElementById("rpt-news").innerHTML =
+      "செய்திகளைப் பெற முடியவில்லை. மீண்டும் முயற்சிக்கவும்.";
+    script.remove();
+  };
+
+  document.body.appendChild(script);
 }
+
 
 loadNews();
 setInterval(loadNews, 60000);
