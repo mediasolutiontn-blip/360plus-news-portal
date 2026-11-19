@@ -16,6 +16,9 @@ button{background:#c82032;color:white;border:0;padding:13px 20px;border-radius:7
 .card{background:white;padding:24px;border-radius:12px;margin:20px 0;box-shadow:0 3px 12px #ddd}
 .logout{float:right;background:#555}
 .status{margin-top:15px;font-weight:bold}
+#imagePreviewBox{display:none;margin:8px 0 16px;padding:12px;border:1px dashed #aaa;border-radius:8px;text-align:center;background:#fafafa}
+#imagePreview{max-width:100%;max-height:260px;object-fit:contain;border-radius:6px}
+#imagePreviewMessage{font-size:14px;color:#666;margin:8px 0 0}
 </style>
 </head>
 <body>
@@ -61,7 +64,11 @@ method="POST">
 <textarea name="details" rows="5" placeholder="செய்தி விவரம்" required></textarea>
 
 <label>புகைப்பட URL</label>
-<input name="imageUrl" placeholder="புகைப்படத்தின் இணைய முகவரி">
+<input id="imageUrl" name="imageUrl" placeholder="Google Drive அல்லது புகைப்பட URL" oninput="previewNewsImage()">
+<div id="imagePreviewBox">
+<img id="imagePreview" alt="புகைப்பட Preview">
+<p id="imagePreviewMessage">படம் ஏற்றப்படுகிறது...</p>
+</div>
 
 <label>செய்தி தேதி</label>
 <input name="date" type="date" required>
@@ -95,6 +102,30 @@ function logoutNow(){
  document.getElementById("login").style.display="block";
  document.getElementById("password").value="";
 }
+function getPreviewImageUrl(value){
+ const url=value.trim();
+ if(!url) return "";
+ let match=url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+ if(!match) match=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+ if(match) return "https://drive.google.com/uc?export=view&id="+match[1];
+ return url;
+}
+function previewNewsImage(){
+ const input=document.getElementById("imageUrl").value;
+ const box=document.getElementById("imagePreviewBox");
+ const img=document.getElementById("imagePreview");
+ const message=document.getElementById("imagePreviewMessage");
+ if(!input.trim()){
+  box.style.display="none";
+  img.removeAttribute("src");
+  return;
+ }
+ box.style.display="block";
+ message.textContent="படம் ஏற்றப்படுகிறது...";
+ img.onload=function(){message.textContent="புகைப்பட Preview சரியாக உள்ளது."};
+ img.onerror=function(){message.textContent="படம் தெரியவில்லை. Google Drive-ல் General access → Anyone with the link என்பதைத் தேர்வு செய்து சரியான Image URL கொடுக்கவும்."};
+ img.src=getPreviewImageUrl(input);
+}
 document.getElementById("newsForm").addEventListener("submit",function(){
  document.getElementById("message").style.color="#b77900";
  document.getElementById("message").textContent="செய்தி அனுப்பப்படுகிறது...";
@@ -103,6 +134,7 @@ document.getElementById("submitFrame").addEventListener("load",function(){
  document.getElementById("message").style.color="green";
  document.getElementById("message").textContent="செய்தி அனுப்பப்பட்டது. Google Sheet-ல் சரிபார்க்கவும்.";
  document.getElementById("newsForm").reset();
+ document.getElementById("imagePreviewBox").style.display="none";
 });
 </script>
 </body>
