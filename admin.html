@@ -63,12 +63,16 @@ method="POST">
 <label>செய்தி விவரம்</label>
 <textarea name="details" rows="5" placeholder="செய்தி விவரம்" required></textarea>
 
-<label>புகைப்பட URL</label>
-<input id="imageUrl" name="imageUrl" placeholder="Google Drive அல்லது புகைப்பட URL" oninput="previewNewsImage()">
+<label>செய்திப் புகைப்படம் Upload செய்யவும்</label>
+<input id="photoFile" type="file" accept="image/jpeg,image/png,image/webp">
+<input type="hidden" name="imageBase64" id="imageBase64">
+<input type="hidden" name="mimeType" id="mimeType">
+<input type="hidden" name="fileName" id="fileName">
 <div id="imagePreviewBox">
 <img id="imagePreview" alt="புகைப்பட Preview">
-<p id="imagePreviewMessage">படம் ஏற்றப்படுகிறது...</p>
+<p id="imagePreviewMessage">படம் தேர்வு செய்யப்படவில்லை.</p>
 </div>
+<p style="font-size:13px;color:#666">JPG, PNG, WEBP | அதிகபட்சம் 5 MB</p>
 
 <label>செய்தி தேதி</label>
 <input name="date" type="date" required>
@@ -102,41 +106,62 @@ function logoutNow(){
  document.getElementById("login").style.display="block";
  document.getElementById("password").value="";
 }
-function getPreviewImageUrl(value){
- const url=value.trim();
- if(!url) return "";
- let match=url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
- if(!match) match=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
- if(match) return "https://drive.google.com/thumbnail?id="+match[1]+"&sz=w1200";
- return url;
-}
-function previewNewsImage(){
- const input=document.getElementById("imageUrl").value;
+document.getElementById("photoFile").addEventListener("change",function(){
+ const file=this.files && this.files[0];
  const box=document.getElementById("imagePreviewBox");
  const img=document.getElementById("imagePreview");
  const message=document.getElementById("imagePreviewMessage");
- if(!input.trim()){
-  box.style.display="none";
-  img.removeAttribute("src");
+ if(!file){box.style.display="none";img.removeAttribute("src");return;}
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
+  this.value="";box.style.display="block";img.removeAttribute("src");
+  message.textContent="JPG, PNG அல்லது WEBP படங்களை மட்டும் தேர்வு செய்யவும்.";return;
+ }
+ if(file.size>5*1024*1024){
+  this.value="";box.style.display="block";img.removeAttribute("src");
+  message.textContent="படத்தின் அளவு 5 MB-க்கு குறைவாக இருக்க வேண்டும்.";return;
+ }
+ box.style.display="block";message.textContent="படம் ஏற்றப்படுகிறது...";
+ const reader=new FileReader();
+ reader.onload=function(e){img.src=e.target.result;message.textContent="புகைப்பட Preview தயார்.";};
+ reader.onerror=function(){message.textContent="படத்தைப் படிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.";};
+ reader.readAsDataURL(file);
+});
+
+document.getElementById("newsForm").addEventListener("submit",function(event){
+ const form=this;
+ const fileInput=document.getElementById("photoFile");
+ const file=fileInput.files && fileInput.files[0];
+ const message=document.getElementById("message");
+ message.style.color="#b77900";
+ message.textContent="செய்தி அனுப்பப்படுகிறது...";
+ if(!file){
+  document.getElementById("imageBase64").value="";
+  document.getElementById("mimeType").value="";
+  document.getElementById("fileName").value="";
   return;
  }
- box.style.display="block";
- message.textContent="படம் ஏற்றப்படுகிறது...";
- img.onload=function(){message.textContent="புகைப்பட Preview சரியாக உள்ளது."};
- img.onerror=function(){message.textContent="படம் தெரியவில்லை. Google Drive-ல் General access → Anyone with the link என்பதைத் தேர்வு செய்து சரியான Image URL கொடுக்கவும்."};
- img.src=getPreviewImageUrl(input);
-}
-document.getElementById("newsForm").addEventListener("submit",function(){
- const imageInput=document.getElementById("imageUrl");
- if(imageInput.value.trim()) imageInput.value=getPreviewImageUrl(imageInput.value);
- document.getElementById("message").style.color="#b77900";
- document.getElementById("message").textContent="செய்தி அனுப்பப்படுகிறது...";
+ event.preventDefault();
+ const reader=new FileReader();
+ reader.onload=function(e){
+  document.getElementById("imageBase64").value=e.target.result;
+  document.getElementById("mimeType").value=file.type;
+  document.getElementById("fileName").value=file.name;
+  HTMLFormElement.prototype.submit.call(form);
+ };
+ reader.onerror=function(){
+  message.style.color="red";
+  message.textContent="படத்தைப் படிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.";
+ };
+ reader.readAsDataURL(file);
 });
+
 document.getElementById("submitFrame").addEventListener("load",function(){
  document.getElementById("message").style.color="green";
  document.getElementById("message").textContent="செய்தி அனுப்பப்பட்டது. Google Sheet-ல் சரிபார்க்கவும்.";
  document.getElementById("newsForm").reset();
  document.getElementById("imagePreviewBox").style.display="none";
+ document.getElementById("imagePreview").removeAttribute("src");
+ document.getElementById("imageBase64").value="";
 });
 </script>
 </body>
