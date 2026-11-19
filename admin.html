@@ -107,7 +107,7 @@ function getPreviewImageUrl(value){
  if(!url) return "";
  let match=url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
  if(!match) match=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
- if(match) return "https://drive.google.com/uc?export=view&id="+match[1];
+ if(match) return "https://drive.google.com/thumbnail?id="+match[1]+"&sz=w1200";
  return url;
 }
 function previewNewsImage(){
@@ -127,6 +127,8 @@ function previewNewsImage(){
  img.src=getPreviewImageUrl(input);
 }
 document.getElementById("newsForm").addEventListener("submit",function(){
+ const imageInput=document.getElementById("imageUrl");
+ if(imageInput.value.trim()) imageInput.value=getPreviewImageUrl(imageInput.value);
  document.getElementById("message").style.color="#b77900";
  document.getElementById("message").textContent="செய்தி அனுப்பப்படுகிறது...";
 });
