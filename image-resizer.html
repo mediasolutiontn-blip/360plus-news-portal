@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>360+ IMAGE RESIZER</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f1f4f9;color:#182238;font-family:Arial,'Noto Sans Tamil',sans-serif}
+main{max-width:760px;margin:28px auto;padding:18px}.card{background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 18px #172c4d14;margin-bottom:18px}
+h1{text-align:center;color:#102447;margin:0 0 8px}.sub{text-align:center;color:#68758a;margin:0 0 22px}
+label{display:block;font-weight:bold;margin:14px 0 8px}input[type=file]{width:100%;padding:12px;border:1px dashed #9aa8bb;border-radius:9px;background:#fafcff}
+button{border:0;border-radius:8px;padding:13px 18px;background:#c82032;color:#fff;font-size:16px;font-weight:bold;cursor:pointer;width:100%;margin-top:14px}
+button:disabled{opacity:.55;cursor:not-allowed}.preview{display:none;margin-top:16px}.preview img{display:block;width:100%;max-height:400px;object-fit:contain;background:#e8edf4;border-radius:10px}
+.info{color:#66748a;font-size:13px;line-height:1.7}.result{display:none;background:#f0fbf4;border:1px solid #b8e5c6;padding:15px;border-radius:10px;margin-top:16px;overflow-wrap:anywhere}
+.result a{color:#126b37}.copy{background:#16834a}.status{margin-top:12px;font-weight:bold;white-space:pre-wrap}
+#cropCanvas{display:none;width:100%;height:auto;border-radius:10px;background:#e8edf4}
+</style>
+</head>
+<body>
+<main>
+ <section class="card">
+  <h1>360+ IMAGE RESIZER</h1>
+  <p class="sub">புகைப்படத்தை 800 × 400 px ஆக Crop செய்து Google Drive-ல் சேமிக்கவும்</p>
+  <label for="photo">புகைப்படத்தைத் தேர்வு செய்யவும்</label>
+  <input id="photo" type="file" accept="image/*">
+  <p class="info">எந்த அளவு புகைப்படமாக இருந்தாலும் தேர்வு செய்யலாம். நடுப்பகுதியை மையமாக வைத்து 2:1 விகிதத்தில் Crop செய்யப்படும். Output: 800 × 400 JPG.</p>
+  <div class="preview" id="preview">
+   <h3>Crop Preview – 800 × 400</h3>
+   <canvas id="cropCanvas" width="800" height="400"></canvas>
+  </div>
+  <button id="uploadBtn" disabled>RESIZE & SAVE TO GOOGLE DRIVE</button>
+  <div class="status" id="status"></div>
+  <div class="result" id="result">
+   <strong>படம் Google Drive-ல் சேமிக்கப்பட்டது!</strong>
+   <p><a id="imageLink" href="#" target="_blank" rel="noopener">படத்தைத் திறக்க</a></p>
+   <button class="copy" id="copyBtn">IMAGE URL COPY</button>
+   <p class="info">இந்த URL-ஐ Admin Dashboard-ல் உள்ள புகைப்பட URL பகுதியில் Paste செய்யுங்கள்.</p>
+  </div>
+ </section>
+ <iframe name="uploadFrame" id="uploadFrame" style="display:none"></iframe>
+</main>
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkDqer7eqlfrpR50a0s2UZI8rZPGeDt_xataK8_UqtO1kkE00jRbNjsxM9MsCDjvOE/exec";
+const photo=document.getElementById('photo'), canvas=document.getElementById('cropCanvas'), ctx=canvas.getContext('2d');
+const btn=document.getElementById('uploadBtn'), statusBox=document.getElementById('status');
+let ready=false, jpgData='';
+photo.addEventListener('change',()=>{
+ ready=false; jpgData=''; btn.disabled=true; document.getElementById('result').style.display='none';
+ const file=photo.files[0]; if(!file)return;
+ if(!file.type.startsWith('image/')){statusBox.textContent='படக் கோப்பைத் தேர்வு செய்யவும்.';return;}
+ const reader=new FileReader();
+ reader.onload=()=>{
+  const img=new Image();
+  img.onload=()=>{
+   const sourceRatio=img.width/img.height, targetRatio=2;
+   let sx=0,sy=0,sw=img.width,sh=img.height;
+   if(sourceRatio>targetRatio){sw=img.height*targetRatio;sx=(img.width-sw)/2;}
+   else{sh=img.width/targetRatio;sy=(img.height-sh)/2;}
+   ctx.clearRect(0,0,800,400);
+   ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+   ctx.drawImage(img,sx,sy,sw,sh,0,0,800,400);
+   jpgData=canvas.toDataURL('image/jpeg',0.88);ready=true;btn.disabled=false;
+   document.getElementById('preview').style.display='block';
+   statusBox.textContent='Preview தயார். சரிபார்த்து Upload செய்யுங்கள்.';
+  };
+  img.onerror=()=>statusBox.textContent='படத்தைத் திறக்க முடியவில்லை.';
+  img.src=reader.result;
+ };
+ reader.readAsDataURL(file);
+});
+btn.addEventListener('click',()=>{
+ if(!ready||!jpgData)return;
+ btn.disabled=true;statusBox.textContent='Google Drive-க்கு Upload ஆகிறது...';
+ const form=document.createElement('form');form.method='POST';form.action=SCRIPT_URL;form.target='uploadFrame';form.style.display='none';
+ const fields={action:'imageUpload',imageBase64:jpgData,mimeType:'image/jpeg',fileName:'360plus-news-'+Date.now()+'.jpg'};
+ Object.entries(fields).forEach(([name,value])=>{const input=document.createElement('input');input.name=name;input.value=value;form.appendChild(input);});
+ document.body.appendChild(form);form.submit();form.remove();
+});
+window.addEventListener('message',event=>{
+ const data=event.data;
+ if(!data||data.type!=='360PLUS_IMAGE_UPLOAD')return;
+ btn.disabled=false;
+ if(data.success&&data.imageUrl){
+  document.getElementById('imageLink').href=data.imageUrl;
+  document.getElementById('imageLink').textContent=data.imageUrl;
+  document.getElementById('result').style.display='block';
+  statusBox.textContent='Upload வெற்றிகரமாக முடிந்தது.';
+  document.getElementById('copyBtn').onclick=async()=>{
+   try{await navigator.clipboard.writeText(data.imageUrl);statusBox.textContent='Image URL Copy செய்யப்பட்டது.';}
+   catch(e){statusBox.textContent='இந்த URL-ஐ கைமுறையாக Copy செய்யுங்கள்: '+data.imageUrl;}
+  };
+ }else statusBox.textContent='Upload தோல்வி: '+(data.error||'தெரியாத பிழை');
+});
+</script>
+</body>
+</html>
