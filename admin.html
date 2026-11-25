@@ -106,7 +106,7 @@ function logoutNow(){
 function getPreviewImageUrl(value){
  const url=value.trim();
  if(!url) return "";
- let match=url.match(/drive\\.google\\.com\\/file\\/d\\/([a-zA-Z0-9_-]+)/);
+ let match=url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
  if(!match) match=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
  if(match) return "https://drive.google.com/uc?export=view&id="+match[1];
  return url;
@@ -138,7 +138,6 @@ document.getElementById("submitFrame").addEventListener("load",function(){
  document.getElementById("newsForm").reset();
  document.getElementById("imagePreviewBox").style.display="none";
  document.getElementById("imagePreview").removeAttribute("src");
- document.getElementById("imageBase64").value="";
 });
 </script>
 </body>
